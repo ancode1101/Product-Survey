@@ -80,7 +80,7 @@ const onSubmit =(ev) => {
                         id="title"
                         value={survey.title}
                         onChange={(ev) =>
-                            setSurvey=({ ...survey, title: ev.target.value })
+                            setSurvey({ ...survey, title: ev.target.value })
                         }
                         placeholder="Survey Title"
                         className="mt-1 black w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-50
@@ -161,10 +161,13 @@ const onSubmit =(ev) => {
               </div>
                 {/* Active */}
             </div>
-            <div className="bg-gray-500 px-4 py-3  text-right md:px-3">
-                <TButton>
+            <div className="bg-gray-50 px-4 py-3 text-left sm:px-6">
+                <button
+                    type="submit"
+                    className="rounded-md bg-indigo-600 px-4 py-3 text-sm text-white "
+                >
                     Save
-                </TButton>
+                </button>
             </div>
         </div>
       </form>
