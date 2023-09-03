@@ -1,4 +1,33 @@
 import React from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+export default function Login() {
+
+  /*const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState({ __html: ''});
+
+  const onSubmit = (ev) => {
+    ev.preventDefault();
+    setError({ __html: ''})
+    
+    axiosClient
+      .post('/login',{
+        email,
+        password,
+      })
+      .then(({data}) => {
+        console.log(data);
+        /**setCurrentUser(data.user)
+        setUserToken(data.token)*
+      })
+      .catch(( error ) => {
+        console.log(error);
+      });
+
+  };
+}*/
 
 const LoginPage = () => {
   const containerStyle = {
@@ -56,6 +85,9 @@ const LoginPage = () => {
       
 
       <div style={{ marginTop: '2.5rem', width: '100%', maxWidth: '20rem' }}>
+          {error._html && (<div className=" bg-red-500 rounded py-2 px-3 text-white"
+            dangerouslySetInnerHTML={error}>
+          </div> )}
         <form style={{ marginBottom: '1.5rem' }} action="#" method="POST">
           <div>
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
@@ -68,6 +100,8 @@ const LoginPage = () => {
                 type="email"
                 autoComplete="email"
                 required
+                value={email}
+                onChange={ev => setEmail(ev.target.value)}
                 style={inputStyle}
               />
             </div>
@@ -81,14 +115,7 @@ const LoginPage = () => {
               >
                 Password
               </label>
-              <div style={{ fontSize: '0.875rem' }}>
-                <a
-                  href="#"
-                  style={{ fontWeight: 600, color: '#6366f1' }}
-                >
-                  Forgot password?
-                </a>
-              </div>
+             
             </div>
             <div style={{ marginTop: '0.5rem' }}>
               <input
@@ -97,6 +124,8 @@ const LoginPage = () => {
                 type="password"
                 autoComplete="current-password"
                 required
+                value={password}
+                onChange={ev => setPassword(ev.target.value)}
                 style={inputStyle}
               />
             </div>
@@ -114,16 +143,14 @@ const LoginPage = () => {
 
         <p style={{ textAlign: 'center', fontSize: '0.875rem', color: '#6b7280' }}>
           Not a member?{' '}
-          <a
-            href="#"
+          <Link
+            to="/signup"
             style={{ fontWeight: 600, color: '#6366f1' }}
           >
-            Start a 14 day free trial
-          </a>
+            signup for free
+          </Link>
         </p>
       </div>
     </div>
   );
 };
-
-export default LoginPage;
