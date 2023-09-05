@@ -79,8 +79,9 @@ export default function Signup() {
             <div className="mt-0">
                 <input
                   id="email_address"
-                  name="Email address"
+                  name="email"
                   type="text"
+                  autoComplete="email"
                   required
                   value={email}
                   onChange={ev => setEmail(ev.target.value)}

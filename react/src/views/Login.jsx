@@ -1,12 +1,16 @@
 import React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axiosClient from '../axios';
+import { LockClosedIcon } from '@heroicons/react/24/solid';
+import { useStateContext } from '../contexts/ContextProvider';
 
 export default function Login() {
 
-  /*const [email, setEmail] = useState('');
+  const {setCurrentUser, setUserToken } = useStateContext();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState({ __html: ''});
+  const [error, setError] = useState({ __htmlhtml: ''});
 
   const onSubmit = (ev) => {
     ev.preventDefault();
@@ -18,139 +22,104 @@ export default function Login() {
         password,
       })
       .then(({data}) => {
-        console.log(data);
-        /**setCurrentUser(data.user)
-        setUserToken(data.token)*
+        setCurrentUser(data.user)
+        setUserToken(data.token)
       })
       .catch(( error ) => {
-        console.log(error);
+        if (error.response) {
+          const finalErrors = Object.values(error.response.data.errors).reduce((accum,next) => [...accum, ...next ], [])
+          setError({ __html: finalErrors.join('<br>')})
+        }
+        console.error(error)
       });
 
   };
-}*/
-
-const LoginPage = () => {
-  const containerStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    padding: '0 1.5rem',
-    backgroundColor: 'white',
-  };
-
-  const inputStyle = {
-    width: '100%',
-    borderRadius: '0.375rem',
-    border: 'none',
-    padding: '0.375rem',
-    color: '#1f2937',
-    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.95)',
-    outline: '2px solid transparent',
-    outlineOffset: '2px',
-    transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
-    marginTop: '0.5rem',
-  };
-
-  const buttonStyle = {
-    display: 'flex',
-    width: '100%',
-    justifyContent: 'center',
-    borderRadius: '0.375rem',
-    backgroundColor: '#4338ca',
-    padding: '0.375rem 0.75rem',
-    color: 'white',
-    fontWeight: 600,
-    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-    outline: 'none',
-    transition: 'background-color 0.15s ease-in-out',
-  };
 
   return (
-    <div style={containerStyle}>
-      
-        
-        <h2
-          style={{
-            marginTop: '1rem',
-            textAlign: 'center',
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            color: '#1f2937',
-          }}
-        >
-          Sign in to your account
-        </h2>
-      
-
-      <div style={{ marginTop: '2.5rem', width: '100%', maxWidth: '20rem' }}>
-          {error._html && (<div className=" bg-red-500 rounded py-2 px-3 text-white"
-            dangerouslySetInnerHTML={error}>
-          </div> )}
-        <form style={{ marginBottom: '1.5rem' }} action="#" method="POST">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-              Email address
-            </label>
-            <div style={{ marginTop: '0.5rem' }}>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={ev => setEmail(ev.target.value)}
-                style={inputStyle}
-              />
-            </div>
-          </div>
-
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <label
-                style={{ fontSize: '0.875rem', fontWeight: 500, color: '#1f2937' }}
-                htmlFor="password"
-              >
-                Password
-              </label>
-             
-            </div>
-            <div style={{ marginTop: '0.5rem' }}>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={ev => setPassword(ev.target.value)}
-                style={inputStyle}
-              />
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              style={buttonStyle}
+    <>
+    
+          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+            Sign in to your account
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Or{" "}
+            <Link
+              to="/signup"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
             >
-              Sign in
-            </button>
-          </div>
-        </form>
+              signup for free
+            </Link>
+          </p>
+          
 
-        <p style={{ textAlign: 'center', fontSize: '0.875rem', color: '#6b7280' }}>
-          Not a member?{' '}
-          <Link
-            to="/signup"
-            style={{ fontWeight: 600, color: '#6366f1' }}
-          >
-            signup for free
-          </Link>
-        </p>
-      </div>
-    </div>
-  );
-};
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          
+          {error.__html &&  (<div className=" bg-red-500 rounded py-2 px-3 text-white"
+          dangerouslySetInnerHTML={error}>
+          </div> )}
+          
+          <form onSubmit={onSubmit} className="space-y-6" action="#" method="POST">
+            <div>
+              <div>
+                <input
+                  id="email_address"
+                  name="email"
+                  type="text"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={ev => setEmail(ev.target.value)}
+                  className="relative block w-full rounded-none border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  placeholder="Email address"
+                />
+              </div>
+              <div>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={ev => setPassword(ev.target.value)}
+                  className="relative block w-full rounded-noo border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  placeholder='Password'
+                />
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                />
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-sm text-sm text-gray-900"
+                >
+                  Remember me
+                </label>
+              </div>
+            </div>
+            <div>
+              <button
+                type="submit"
+                className="group relative flex w-full justify-center rounded-noo bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                <span className="adsolute inset-y-0 left-0 flex items-center pl-3">
+                  <LockClosedIcon
+                    className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                    aria-hidden="true"
+                  />
+                </span>
+                Sign in
+              </button>
+            </div>
+          </form>
+        </div>
+    </>
+  )
+}
