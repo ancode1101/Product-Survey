@@ -16,4 +16,4 @@ class SurveyResource extends JsonResource
     {
         return parent::toArray($request);
     }
-}
+} 
