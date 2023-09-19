@@ -3,7 +3,7 @@
 namespace App\Enums;
 
 
-enum QuestionTypeEnums: string
+enum QuestionTypeEnum: string
 {
     case TYPE_TEXT = 'text';
     case TYPE_TEXTAREA = 'textarea';

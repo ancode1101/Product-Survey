@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Enum;
 use Termwind\Question;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class SurveyController extends Controller
 {
@@ -37,6 +37,7 @@ class SurveyController extends Controller
     public function store(StoreSurveyRequest $request)
     {
         $data = $request->validated();
+        
 
         if (isset($data['image'])) {
             $relativePath = $this->saveImage($data['image']);
@@ -47,9 +48,15 @@ class SurveyController extends Controller
      
 
         //create new Questions
-        foreach ($data['questions'] as $question) {
-            $question['survey_id'] = $survey->id;
-            $this->createQuestion($question);
+        if (array_key_exists('questions', $data)) {
+            //create new Questions
+            foreach ($data['questions'] as $question) {
+                $question['survey_id'] = $survey->id;
+                $this->createQuestion($question);
+            }
+        } else {
+            // Handle the case when 'questions' key doesn't exist
+            echo "'questions' key doesn't exist in the array.";
         }
 
         return new SurveyResource($survey);
@@ -81,7 +88,7 @@ class SurveyController extends Controller
             //if there is an old image, delete it
             if ($survey->image) {
                 $absolutePath = public_path($survey->image);
-                File::delete(@$absolutePath);
+                File::delete($absolutePath);
             }
         }
 
@@ -147,9 +154,9 @@ class SurveyController extends Controller
     private function saveImage($image)
     {
         //check if image is valid base 64 string
-        if (preg_match('/^data:image\/(w+);base64,/', $image, $type)) {
+        if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
             // take out the base64 encodeed text without mime type
-            $image = substr($image, strpos(@$image, ',') + 1);
+            $image = substr($image, strpos($image, ',') + 1);
             // get file extension
             $type = strtolower($type[1]); //jpg, png, gif
 
@@ -160,7 +167,7 @@ class SurveyController extends Controller
             $image = str_replace(' ', '+', $image);
             $image = base64_decode($image);
 
-            if ($image == false) {
+            if ($image === false) {
                 throw new \Exception('base64_decode failed');
             }
         } else {
@@ -168,9 +175,9 @@ class SurveyController extends Controller
         }
 
         $dir = 'images/';
-        $file = Str::ramdom() . '.' . $type;
+        $file = Str::random() . '.' . $type;
         $absolutePath = public_path($dir);
-        $relativePath = $dir .$file;
+        $relativePath = $dir . $file;
         if (!File::exists($absolutePath)) {
             File::makeDirectory($absolutePath, 0755, true);
         }
@@ -184,8 +191,8 @@ class SurveyController extends Controller
             $data['data'] = json_encode($data['data']);
         }
         $validator = Validator::make($data, [
-            'question' => 'required|string',
-            'type' => ['required', new Enum(QuestionTypeEnum::class)],
+            'question' => 'validateRequired|string',
+            'type' => ['validateRequired', new Enum(QuestionTypeEnums::class)],
             'description' => 'nullable|string',
             'data' => 'present',
             'survey_id' => 'exists:App\Models\Survey,id'
@@ -197,12 +204,12 @@ class SurveyController extends Controller
     private function updateQuestion(SurveyQuestion $question, $data)
     {
         if (is_array($data['data'])) {
-            $data['data'] = json_encode($data['$data']);
+            $data['data'] = json_encode($data['data']);
         }
         $validator = Validator::make($data, [
             'id' => 'exists:App\Models\SurveyQuestion,id',
-            'question' => 'required|string',
-            'type' => ['required', new Enum(QuestionTypeEnum::class)],
+            'question' => 'validateRequired|string',
+            'type' => ['validateRequired', new Enum(QuestionTypeEnum::class)],
             'description' => 'nullable|string',
             'data' => 'present',
         ]);

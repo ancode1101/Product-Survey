@@ -6,7 +6,7 @@ import Login from "./views/Login";
 import Signup from "./views/Signup";
 import DefaultLayout from "./components/DefaultLayout";
 import { Navigate } from 'react-router-dom';
-import SurveyView from "./views/SurveyView";
+import SurveyView from './views/SurveyView';
 
 
 
