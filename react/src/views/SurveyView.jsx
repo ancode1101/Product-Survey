@@ -50,7 +50,7 @@ export default function SurveyView() {
         axiosClient.post('/survey', payload)
         .then(res => {
             console.log(res);
-            navigate('/surveys')
+            navigate('/surveys');
         })
         .catch((err) => {
             if(err && err.response) {
@@ -61,6 +61,9 @@ export default function SurveyView() {
             
     };
     
+    function onSurveyUpdate(survey) {
+        setSurvey({...survey})
+    }
     
     return (
         <PageComponent title="Create new Survey">

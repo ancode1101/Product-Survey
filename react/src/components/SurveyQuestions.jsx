@@ -1,5 +1,4 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
-import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import {v4 as uuidv4 } from "uuid";
@@ -8,18 +7,20 @@ import QuestionEditor from "./QuestionEditor";
 export default function SurveyQuestions({ survey, onSurveyUpdate }) {
     const [model, setModel] = useState({ ...survey });
 
-    const addQuestion = () => {
+    const addQuestion = (index) => {
+        index = index !== undefined ? index : model.questions.length
+       
+        model.questions.splice(index, 0, {
+            id: uuidv4(),
+            type: "text",
+            question: "",
+            description: "",
+            data: {},   
+        }),
         setModel({
             ...model, 
             questions: [
-                ...model.questions,
-                {
-                    id: uuidv4(),
-                    type: "text",
-                    question: "",
-                    description: "",
-                    data: {},   
-                },
+                ...model.questions
             ],
         });
     };
@@ -38,7 +39,7 @@ export default function SurveyQuestions({ survey, onSurveyUpdate }) {
         });
     };
     
-    const deleteQueston = (question) => {
+    const deleteQuestion = (question) => {
         const newQuestions = model.questions.filter((q) => q.id !== question.id);
         setModel({
             ...model ,
@@ -60,18 +61,18 @@ export default function SurveyQuestions({ survey, onSurveyUpdate }) {
                 onClick={addQuestion}
             >
                 <PlusIcon className="w-4 mr-2" />
-                Add questiions
+                Add questions
             </button>
         </div>
         {model.questions.length ? (
-            model.Questions.map((q, ind) => (
+            model.questions.map((q, ind) => (
                 <QuestionEditor
                     key={q.id}
                     index={ind}
                     question={q}
                     questionChange={questionChange}
                     addQuestion={addQuestion}
-                    deleteQueston={deleteQueston}
+                    deleteQueston={deleteQuestion}
                 />
             ))
         ) : (

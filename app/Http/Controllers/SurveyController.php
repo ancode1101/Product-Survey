@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\QuestionTypeEnum;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
 use App\Http\Resources\SurveyResource;
@@ -11,9 +12,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 use Termwind\Question;
 use Illuminate\Support\Facades\Validator;
+
 
 class SurveyController extends Controller
 {
@@ -26,7 +29,7 @@ class SurveyController extends Controller
 
         return SurveyResource::collection(
             Survey::where('user_id', $user->id)
-                ->orderBy('create_at', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->paginate(10)
         );
     }
@@ -37,30 +40,21 @@ class SurveyController extends Controller
     public function store(StoreSurveyRequest $request)
     {
         $data = $request->validated();
-        
-
-        if (isset($data['image'])) {
-            $relativePath = $this->saveImage($data['image']);
-            $data['image'] = $relativePath;
+    
+        // Check if 'questions' key exists and is an array
+        if (!isset($data['questions']) || !is_array($data['questions'])) {
+            return response()->json(['error' => "'questions' key is missing or not an array"], 400);
         }
-
-        $survey = Survey::create($data);
-     
-
-        //create new Questions
-        if (array_key_exists('questions', $data)) {
-            //create new Questions
-            foreach ($data['questions'] as $question) {
-                $question['survey_id'] = $survey->id;
-                $this->createQuestion($question);
-            }
-        } else {
-            // Handle the case when 'questions' key doesn't exist
-            echo "'questions' key doesn't exist in the array.";
+    
+        // 'questions' key exists and is an array, proceed with creating questions
+        foreach ($data['questions'] as $question) {
+            $question['survey_id'] = $survey->id;
+            $this->createQuestion($question);
         }
-
-        return new SurveyResource($survey);
+    
+        // Rest of your code to save the survey and return a response
     }
+    
     /**
      * Display the specified resource.
      */
@@ -111,7 +105,7 @@ class SurveyController extends Controller
         SurveyQuestion::destroy($toDelete);
 
         //create new questions
-        foreach($data['questiond'] as $question) {
+        foreach($data['questions'] as $question) {
             if (in_array($question['id'], $toAdd)) {
                 $question['survey_id'] = $survey->id;
                 $this->createQuestion($question);
@@ -187,12 +181,18 @@ class SurveyController extends Controller
     }
 
     private function createQuestion($data) {
-        if (is_array($data['$data'])) {
+        if (isset($data['data'])) {
             $data['data'] = json_encode($data['data']);
         }
         $validator = Validator::make($data, [
-            'question' => 'validateRequired|string',
-            'type' => ['validateRequired', new Enum(QuestionTypeEnums::class)],
+            'question' => 'required|string',
+            //'type' => ['validateRequired', new Enum(QuestionTypeEnum::class)],
+            'type' => [
+                'required', Rule::in([
+                    'text'
+                    //QuestionTypeEnum::class
+                    ])
+            ],
             'description' => 'nullable|string',
             'data' => 'present',
             'survey_id' => 'exists:App\Models\Survey,id'
@@ -208,8 +208,8 @@ class SurveyController extends Controller
         }
         $validator = Validator::make($data, [
             'id' => 'exists:App\Models\SurveyQuestion,id',
-            'question' => 'validateRequired|string',
-            'type' => ['validateRequired', new Enum(QuestionTypeEnum::class)],
+            'question' => 'required|string',
+            'type' => ['required', new Enum(QuestionTypeEnum::class)],
             'description' => 'nullable|string',
             'data' => 'present',
         ]);
