@@ -61,8 +61,9 @@ export default function SurveyView() {
             
     };
     
-    function onSurveyUpdate(survey) {
-        setSurvey({...survey})
+    function onSurveyUpdate(s) {
+        
+        setSurvey({...s})
     }
     
     return (

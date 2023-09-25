@@ -40,19 +40,22 @@ class SurveyController extends Controller
     public function store(StoreSurveyRequest $request)
     {
         $data = $request->validated();
-    
-        // Check if 'questions' key exists and is an array
-        if (!isset($data['questions']) || !is_array($data['questions'])) {
-            return response()->json(['error' => "'questions' key is missing or not an array"], 400);
+
+        // Check if image was given and save on local file system
+        if (isset($data['image'])) {
+            $relativePath = $this->saveImage($data['image']);
+            $data['image'] = $relativePath;
         }
-    
-        // 'questions' key exists and is an array, proceed with creating questions
+
+        $survey = Survey::create($data);
+
+        // Create new questions
         foreach ($data['questions'] as $question) {
             $question['survey_id'] = $survey->id;
             $this->createQuestion($question);
         }
-    
-        // Rest of your code to save the survey and return a response
+
+        return new SurveyResource($survey);
     }
     
     /**
@@ -180,26 +183,24 @@ class SurveyController extends Controller
         return $relativePath;
     }
 
-    private function createQuestion($data) {
-        if (isset($data['data'])) {
+    private function createQuestion($data)
+    {
+        if (is_array($data['data'])) {
             $data['data'] = json_encode($data['data']);
         }
         $validator = Validator::make($data, [
             'question' => 'required|string',
-            //'type' => ['validateRequired', new Enum(QuestionTypeEnum::class)],
             'type' => [
-                'required', Rule::in([
-                    'text'
-                    //QuestionTypeEnum::class
-                    ])
+                'required', new Enum(QuestionTypeEnum::class)
             ],
             'description' => 'nullable|string',
             'data' => 'present',
             'survey_id' => 'exists:App\Models\Survey,id'
-        ]);  
+        ]);
 
         return SurveyQuestion::create($validator->validated());
     }
+
 
     private function updateQuestion(SurveyQuestion $question, $data)
     {

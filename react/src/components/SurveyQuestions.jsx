@@ -9,7 +9,7 @@ export default function SurveyQuestions({ survey, onSurveyUpdate }) {
 
     const addQuestion = (index) => {
         index = index !== undefined ? index : model.questions.length
-       
+        
         model.questions.splice(index, 0, {
             id: uuidv4(),
             type: "text",
@@ -51,10 +51,14 @@ export default function SurveyQuestions({ survey, onSurveyUpdate }) {
         onSurveyUpdate(model);
     }, [model]);
 
+    useEffect(() => {
+        setModel({ ...survey });
+    }, [survey]);
   return (
     <>
         <div className="flex justify-between">
             <h3 className="text-2x1 font-bold">Questions</h3>
+            <pre>{JSON.stringify(model, undefined, 2)}</pre>
             <button
                 type="button"
                 className="flex items-center text-sm py-1 px-4 rounded-sm text-white bg-gray-600 hover:bg-gray-700"
