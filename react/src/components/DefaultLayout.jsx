@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { NavLink, Navigate, Outlet } from 'react-router-dom'
@@ -8,11 +8,11 @@ import axiosClient from '../axios'
 
 const navigation = [
   { name: 'Dashboard', to: '/'},
-  { name: 'Surveys', to: '/surveys', },
+  { name: 'Surveys', to: '/surveys' }
 ]
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function DefaultLayout() {
@@ -22,7 +22,6 @@ export default function DefaultLayout() {
     return <Navigate to ='login' />
   }
 
-
   const logout = (ev) => {
     ev.preventDefault();
     axiosClient.post("/logout").then((res) => {
@@ -31,6 +30,14 @@ export default function DefaultLayout() {
       });
   };
   
+  useEffect(() =>{
+    axiosClient.get('/me')
+      .then(({data}) => {
+        
+        setCurrentUser(data)
+      })
+      
+  }, [])
   
   return (
     <>
@@ -125,7 +132,8 @@ export default function DefaultLayout() {
                       to ={item.to}
                       className={({ isActive }) => classNames(
                         isActive 
-                        ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        ? 'bg-gray-900 text-white' 
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                         'block rounded-md px-3 py-2 text-base font-medium'
                       )}
                     >
@@ -139,8 +147,12 @@ export default function DefaultLayout() {
                       <UserIcon className='w-8 h-8 bg-black/25 p-2 rounded-full text-white'/> 
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">{currentUser.name}</div>
-                      <div className="text-sm font-medium leading-none text-gray-400">{currentUser.email}</div>
+                      <div className="text-base font-medium leading-none text-white">
+                        {currentUser && currentUser.name}
+                      </div>
+                      <div className="text-sm font-medium leading-none text-gray-400">
+                        {currentUser&& currentUser.email}
+                      </div>
                     </div>
                   </div>
                   <div className="mt-3 space-y-1 px-2">
@@ -153,7 +165,7 @@ export default function DefaultLayout() {
                       >
                         Sign out
                       </Disclosure.Button>
-                    ))
+                    
                   </div>
                 </div>
               </Disclosure.Panel>

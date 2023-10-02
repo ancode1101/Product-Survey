@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PageComponent from '../components/PageComponent';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import axiosClient from '../axios.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import SurveyQuestions from '../components/SurveyQuestions';
+import TButton from '../components/core/TButton';
+import {v4 as uuidv4 } from "uuid";
 
 
 export default function SurveyView() {
     const navigate = useNavigate();
+    const {id} = useParams()
 
     const [survey, setSurvey] = useState({
         title: "",
@@ -19,6 +22,7 @@ export default function SurveyView() {
         expire_date: "",
         questions: [],
     });
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const onImageChoose = (ev) => {
@@ -47,8 +51,15 @@ export default function SurveyView() {
             payload.image = payload.image_url;
         }
         delete payload.image_url;
-        axiosClient.post('/survey', payload)
-        .then(res => {
+        let res = null;
+        if (id) {
+            res = axiosClient.put(`/survey/${id}`, payload);
+        } else {
+            res = axiosClient.post('/survey', payload);
+        }
+        
+        res
+        .then((res) => {
             console.log(res);
             navigate('/surveys');
         })
@@ -61,14 +72,45 @@ export default function SurveyView() {
             
     };
     
-    function onSurveyUpdate(s) {
+    function onQuestionUpdate(questions) {
+        setSurvey({
+            ...survey,
+            questions
+        })
+    };
+
+
+    const addQuestion = () => {
         
-        setSurvey({...s})
-    }
+        survey.questions.push({
+            id: uuidv4(),
+            type: "text",
+            question: "",
+            description: "",
+            data: {},   
+        })
+        setSurvey({ ...survey })
+        // setmyQuestions([ ...myQuestions]);
+        // onQuestionUpdate(myQuestions)
+    };
+
+    useEffect(() => {
+        if  (id) {
+            setLoading(true)
+            axiosClient.get(`/survey/${id}`)
+                .then(({data}) => {
+                    setSurvey(data.data)
+                    setLoading(false)
+                }) 
+        }
+    },[])
+
+
     
     return (
-        <PageComponent title="Create new Survey">
-            <form  action="#" method="POST" onSubmit={onSubmit}>
+        <PageComponent title={!id ? 'Create new Survey' : 'Update Survey'}>
+            {loading && <div className="text-center text-lg">Loading...</div>}
+            {!loading && <form  action="#" method="POST" onSubmit={onSubmit}>
                 <div className=" shadow sm:overflow-hidden sm:rounded-md">
                 
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
@@ -142,7 +184,7 @@ export default function SurveyView() {
                             <textarea
                                 name="description"
                                 id="description"
-                                value={survey.description}
+                                value={survey.description || ''}
                                 onChange={(ev) => setSurvey({ ...survey, description: ev.target.value })}
                                 placeholder=" Describe your survey"
                                 className=" mt-1 blact w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-50
@@ -194,7 +236,9 @@ export default function SurveyView() {
                             </div>
                         </div>
                         {/* Active */}
-                        <SurveyQuestions survey={survey} onSurveyUpdate={onSurveyUpdate}/>
+
+                        <button type="button" onClick = {addQuestion}> Add question</button>
+                        <SurveyQuestions questions={survey.questions} onQuestionUpdate={onQuestionUpdate}/>
                     </div>
                     <div className="bg-gray-50 px-4 py-3 text-left sm:px-6">
                         <button
@@ -206,6 +250,7 @@ export default function SurveyView() {
                     </div>
                 </div>
             </form>
+            }
         </PageComponent>
     );
 }

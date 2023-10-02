@@ -12,7 +12,7 @@ const StateContext = createContext({
 });
 
 const tmpSurveys = [
-    {
+      {
         "id": 1,
         "image_url": "https:\/\/api.yoursurveys.xyz\/images\/vJutXzn02CDwdOyh.png",
         "title": "TheCodeholic YouTube channel",

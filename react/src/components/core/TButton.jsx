@@ -101,7 +101,7 @@ export default function TButton({
             </a>
         )}
         {to && (
-            <Link to={to} className={classes.join(" ")}>
+            <Link to={to} className={classes.join(" ")} >
                 {children}
             </Link>)}
         {!to && !href && (

@@ -16,12 +16,12 @@ export default function SurveyListItem({survey, onDeleteClick}) {
         className=" overflow-hidden flex-1"
       ></div> 
       <div className=" flex justify-between items-center mt-3">
-        <TButton to = {'survey/${survey.id}'}>
+        <TButton to = {`/surveys/${survey.id}`}>
           <PencilIcon className="w-5 h-5 mr-3" />
             Edit
          </TButton>
          <div className=" flex items-center">
-          <TButton href = {'/view/survey/${survey.slug}'} circle link>
+          <TButton href = {`/view/survey/${survey.slug}`} circle link>
             <ArrowTopRightOnSquareIcon className="w-5 h-5"/>
           </TButton>
           {survey.id && (

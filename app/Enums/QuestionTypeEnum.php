@@ -9,5 +9,5 @@ enum QuestionTypeEnum: string
     case textarea = 'textarea';
     case Select = 'select';
     case Radio = 'radio';
-    case Chechbox = 'checkbox';
+    case Checkbox = 'checkbox';
 }
