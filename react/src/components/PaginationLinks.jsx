@@ -32,18 +32,20 @@ export default function PaginationLinks({meta, onPageClick }) {
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-gray-700">
-            Showing <span className="font-medium">{meta.from}</span> to <span className="font-medium">{meta.to}</span> of &nbsp;
+            Showing <span className="font-medium">{meta.from}</span> to {" "}
+            <span className="font-medium">{meta.to}</span> of &nbsp;
             <span className="font-medium">{meta.total}</span> results
           </p>
         </div>
         <div>
-          <nav className="isolate inline-flex -space-x-px rounded-i-md shadow-sm" aria-label="Pagination">
+          { meta.total > meta.per_page && <nav className="isolate inline-flex -space-x-px rounded-i-md shadow-sm" aria-label="Pagination">
           
             {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
             {meta.links && meta.links.map((link, ind) => (
                 <a
                   href="#"
                   onClick={ev => onClick(ev, link)}
+                  key={ind}
                   aria-current="page"
                   className = {
                         "relative z-10 inline-flex items-cente border px-4 py-2 text-sm font-mediam focus:z-20 hover:bg-gray-50 "
@@ -56,6 +58,7 @@ export default function PaginationLinks({meta, onPageClick }) {
                 </a>
             ))}
           </nav>
+          }
         </div>
       </div>
     </div>

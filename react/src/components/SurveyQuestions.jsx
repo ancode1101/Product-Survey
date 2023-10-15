@@ -38,11 +38,13 @@ export default function SurveyQuestions({ questions, onQuestionUpdate }) {
         
         setmyQuestions(newQuestions);
         onQuestionUpdate(newQuestions)
+        
     };
 
     useEffect(() => {
         setmyQuestions(questions)
     }, [questions]);
+    // debugger
 
   return (
     <>
@@ -65,7 +67,7 @@ export default function SurveyQuestions({ questions, onQuestionUpdate }) {
                     question={q}
                     questionChange={questionChange}
                     addQuestion={addQuestion}
-                    deleteQueston={deleteQuestion}
+                    deleteQuestion={deleteQuestion}
                 />
             ))
         ) : (

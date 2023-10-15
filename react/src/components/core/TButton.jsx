@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function TButton({
 
-                         color = 'indego',
+                         color = 'indigo',
                          to ='',
                          circle = false,
                          href = '',
@@ -13,6 +13,7 @@ export default function TButton({
                         }) {
     let classes = [
       "flex",
+      "item-center", 
       "whitespace-nowrap",
       "text-sm",
       "border",
@@ -49,17 +50,17 @@ export default function TButton({
             case "indigo":
                 classes = [
                     ...classes,
-                    "bg-indego-600",
-                    "hover:bg-indego-700",
-                    "focu:ring-indigo-500",
+                    "bg-indigo-600",
+                    "hover:bg-indigo-700",
+                    "focus:ring-indigo-500",
                 ];
                 break;
             case "red":
                 classes = [
                     ...classes,
-                    "bg-indego-600",
+                    "bg-red-600",
                     "hover:bg-red-700",
-                    "focu:ring-red-500",
+                    "focus:ring-red-500",
                 ];
                 break;
             case "green":
@@ -67,7 +68,7 @@ export default function TButton({
                     ...classes,
                     "bg-emerald-500",
                     "hover:bg-emerald-600",
-                    "focu:ring-emerald-400",
+                    "focus:ring-emerald-400",
                 ];
                 break;
         }

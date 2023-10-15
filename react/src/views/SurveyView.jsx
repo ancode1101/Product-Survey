@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import PageComponent from '../components/PageComponent';
-import { PhotoIcon } from '@heroicons/react/24/outline';
+import { LinkIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline';
 import axiosClient from '../axios.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import SurveyQuestions from '../components/SurveyQuestions';
 import TButton from '../components/core/TButton';
 import {v4 as uuidv4 } from "uuid";
+import { useStateContext } from '../contexts/ContextProvider';
 
 
 export default function SurveyView() {
+    const {showToast} = useStateContext();
     const navigate = useNavigate();
     const {id} = useParams()
 
@@ -62,6 +64,11 @@ export default function SurveyView() {
         .then((res) => {
             console.log(res);
             navigate('/surveys');
+            if(id) {
+                showToast('The survey was updated');
+            } else {
+                showToast('The survey was created');
+            }
         })
         .catch((err) => {
             if(err && err.response) {
@@ -94,6 +101,10 @@ export default function SurveyView() {
         // onQuestionUpdate(myQuestions)
     };
 
+    const onDelete = () => {
+
+    }
+
     useEffect(() => {
         if  (id) {
             setLoading(true)
@@ -105,10 +116,23 @@ export default function SurveyView() {
         }
     },[])
 
-
+    
     
     return (
-        <PageComponent title={!id ? 'Create new Survey' : 'Update Survey'}>
+        <PageComponent 
+            title={!id ? 'Create new Survey' : 'Update Survey'}
+            buttons = {
+              <div className='flex gap-3 '>
+                <TButton color="green" href={`/survey/public/${survey.slug}`}>
+                   <LinkIcon className="h-4 w-4 mr-2"/>
+                   Public Link
+                </TButton>
+                <TButton color="red" onclick={onDelete}>
+                    <TrashIcon className="h-4 w-4 mr-2"/>
+                    Delete
+                </TButton>
+              </div>
+            }>
             {loading && <div className="text-center text-lg">Loading...</div>}
             {!loading && <form  action="#" method="POST" onSubmit={onSubmit}>
                 <div className=" shadow sm:overflow-hidden sm:rounded-md">
@@ -146,7 +170,8 @@ export default function SurveyView() {
                                     <input
                                         type="file"
                                         className="absolute left-0 top-0 right-0 opacity-0"
-                                        onChange={onImageChoose} />
+                                        onChange={onImageChoose} 
+                                    />
                                     changes
                                 </button>
                             </div>
@@ -241,12 +266,12 @@ export default function SurveyView() {
                         <SurveyQuestions questions={survey.questions} onQuestionUpdate={onQuestionUpdate}/>
                     </div>
                     <div className="bg-gray-50 px-4 py-3 text-left sm:px-6">
-                        <button
+                        <TButton
                             type="submit"
                             className="rounded-md bg-indigo-600 px-4 py-3 text-sm text-white "
                         >
                             Save
-                        </button>
+                        </TButton>
                     </div>
                 </div>
             </form>

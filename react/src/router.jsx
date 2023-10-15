@@ -1,4 +1,4 @@
-import { createBrowserRouter, useNavigate } from "react-router-dom";
+import { Outlet, createBrowserRouter, useNavigate } from "react-router-dom";
 import GuestLayout from "./components/GuestLayout";
 import Dashboard from "./views/Dashboard";
 import Surveys from "./views/Surveys";
@@ -7,6 +7,8 @@ import Signup from "./views/Signup";
 import DefaultLayout from "./components/DefaultLayout";
 import { Navigate } from 'react-router-dom';
 import SurveyView from './views/SurveyView';
+import SurveyPublicView from "./views/SurveyPublicView";
+
 
 
 
@@ -51,6 +53,11 @@ const router = createBrowserRouter([
             },
         ],
     },
+
+    {
+        path: '/survey/public/:slug',
+        element: <SurveyPublicView />,
+    }
     
 ]);  
 
