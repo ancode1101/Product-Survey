@@ -33,25 +33,25 @@ export default function Dashboard(){
           <DashboardCard
             title="Total Surveys"
             className="order-1 lg:order-2"
-            style="animation-delay: 0.1s"
+            style={{ animationDelay: "0.1s"}}
           >
-            <div className="text-8x1 pd-4 font-semibold flex-1 flex items-center justify-center">
+            <div className="text-8xl pb-4 font-semibold flex-1 flex items-center justify-center">
               {data.totalSurveys}
             </div>
           </DashboardCard>
           <DashboardCard
             title="Total Answers"
             className="order-2 lg:order-4"
-            style="animation-delay: 0.2s"
+            style={{ animationDelay: "0.2s" }}
           >
-            <div className="text-8x1 pd-4 font-semibold flex-1 flex items-center justify-center">
+            <div className="text-8xl pb-4 font-semibold flex-1 flex items-center justify-center">
               {data.totalAnswers}
             </div>
           </DashboardCard>
           <DashboardCard
             title="Latest Survey"
             className="order-3 lg:order-1 row-span-2" 
-            style="animation-delay: 0.2s"
+            style={{animationDelay: "0.2s"}}
           >
             {data.latestSurvey && (
               <div>
@@ -104,7 +104,7 @@ export default function Dashboard(){
           <DashboardCard
             title="Latest Answers"
             className="order-4 lg:order-3 row-span-2" 
-            style="animation-delay: 0.3s"
+            style={{animationDelay: "0.3s"}}   
           >
             {data.latestAnswers.length && (
               <div className="text-left">
