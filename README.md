@@ -1,13 +1,13 @@
 # PRODUCT SURVEY WEB APPLICATION
-#– PROJECT PROPOSAL
+– PROJECT PROPOSAL
 
-# Introduction:
+ Introduction:
 The "Product Survey Web Application" project seeks to develop a comprehensive web-based platform 
 designed to simplify the process of conducting product surveys. It addresses the need for efficient, 
 user-friendly survey tools. By allowing users to sign up, log in, and conduct surveys, this project aims 
 to streamline data collection and analysis for various products.
 
-#Objectives:
+Objectives:
 1. Development of a User-Friendly Web Application: Our primary goal is to create an intuitive, 
 user-friendly web application that simplifies the survey process, making it accessible to a wide 
 range of users.
@@ -23,7 +23,7 @@ storage of survey responses, ensuring data reliability and confidentiality.
 comprehensive reports and insights from survey data. This will provide valuable information 
 for decision-making processes.
 
-#Scope:
+Scope:
 • Development of a User-Friendly Web Application: Our primary goal is to create an intuitive, 
 user-friendly web application that simplifies the survey process, making it accessible to a wide 
 range of users.
@@ -39,7 +39,7 @@ storage of survey responses, ensuring data reliability and confidentiality.
 comprehensive reports and insights from survey data. This will provide valuable information 
 for decision-making processes.
 
-#Methodology:
+Methodology:
 1. Development Cycles: Agile involves dividing the project into smaller iterations or sprints, each 
 focusing on specific features or components. These iterations are short, typically spanning a 
 few weeks, and aim to deliver a functional part of the application.
@@ -60,7 +60,7 @@ likelihood of bugs.
 adapt the project's direction in response to new information, such as changing user needs or 
 technological advancements.
 
-#Tools & Technology:
+Tools & Technology:
 These tools and technologies play essential roles in different aspects of your web development project, 
 from setting up a local development environment to managing dependencies, coding, and 
 incorporating real-time features for enhanced user interaction.
@@ -78,7 +78,7 @@ It allows developers to execute JavaScript, React code on the server, as opposed
 where JavaScript is typically used. Node.js will be utilized to incorporate real-time features 
 and enhance user interaction.
 
-#Timeline:
+Timeline:
 The estimated timeline for the implementation of the PHP-based Product Survey Web Application is 
 12-16 weeks. This includes development, testing, deployment, and training phases.
 • Weeks 1-2: Requirement analysis and system design.
@@ -89,7 +89,7 @@ The estimated timeline for the implementation of the PHP-based Product Survey We
 • Weeks 13-14: Optimization.
 • Weeks 15-16: Training sessions and final adjustments.
 
-#Resources:
+Resources:
 For successful project execution, the following resources will be required:
 • Development Team: Skilled developers proficient in web technologies (Tailwind CSS, React, 
 PHP, JavaScript).
@@ -97,7 +97,7 @@ PHP, JavaScript).
 and eventual deployment.
 • User Feedback: User testing and feedback will be crucial for refining and enhancing the system.
 
-#Expected Outcomes: 
+Expected Outcomes: 
 Upon completion, the "Product Survey Web Application" is expected to deliver the following 
 outcomes:
 • A fully functional, web-based product survey system.
@@ -105,7 +105,7 @@ outcomes:
 • Secure user authentication and data storage.
 • Basic data analysis features to provide initial insights from collected survey data.
 
-#References:
+References:
 1. Apache Software Foundation 1999-2004. Apache HTTP Server Project. Apache Software 
 Foundation. http://httpd.apache.org/.
 2. BATINI, C., CERI, S., AND NAVATHE, S. B. 1992. Conceptual Database Design: An 
